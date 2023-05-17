@@ -55,7 +55,7 @@ func (c ChatGPT) Check(req *types.RequestMessage) float32 {
 
 func (c ChatGPT) Execute(req *types.RequestMessage) (types.ResponseMessage, error) {
 
-	previousMessages := req.Context
+	previousMessages := req.ShortTermMemory
 	history := make([]openai.ChatCompletionMessage, len(previousMessages))
 	for i, message := range previousMessages {
 		history[i] = messageToChatCompletionMessage(message)

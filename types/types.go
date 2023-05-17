@@ -1,17 +1,17 @@
 package types
 
 type ResponseMessage struct {
-	ChatID  int64
-	Message string
-	Bytes   []byte
-	Context []StoredMessage
+	ChatID          int64
+	Message         string
+	Bytes           []byte
+	ShortTermMemory []StoredMessage
 }
 
 type RequestMessage struct {
-	UserName string
-	ChatID   int64
-	Message  string
-	Context  []StoredMessage
+	UserName        string
+	ChatID          int64
+	Message         string
+	ShortTermMemory []StoredMessage
 }
 
 type StoredMessage struct {

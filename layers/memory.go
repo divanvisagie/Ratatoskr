@@ -22,7 +22,7 @@ func (m *MemoryLayer) PassThrough(req *types.RequestMessage) (types.ResponseMess
 	if err != nil {
 		return types.ResponseMessage{}, err
 	}
-	req.Context = history
+	req.ShortTermMemory = history
 
 	res, err := m.child.PassThrough(req)
 	if err != nil {

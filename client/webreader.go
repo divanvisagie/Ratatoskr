@@ -11,31 +11,25 @@ import (
 	"github.com/gocolly/colly"
 )
 
-// Shorten text to a specific amount of tokens
-func shorten(text string, limit int) string {
-	words, err := utils.Tokenize(text)
+// break text into chunks of 500 tokens
+func breakText(text string) []string {
+	tokens, err := utils.Tokenize(text)
 	if err != nil {
-		words = strings.Fields(text)
+		tokens = strings.Fields(text)
 	}
 
-	if len(words) > limit {
-		// Split the input string into words using the Fields function from the strings package
-
-		// Return the length of the resulting slice
-		cut := words[:limit]
-		return strings.Join(cut, "")
+	chunks := []string{}
+	for i := 0; i < len(tokens); i += 500 {
+		end := i + 500
+		if end > len(tokens) {
+			end = len(tokens)
+		}
+		chunks = append(chunks, strings.Join(tokens[i:end], ""))
 	}
-
-	return strings.Join(words, " ")
+	return chunks
 }
 
-func trimText(text string, limit int) string {
-	trimmed := strings.TrimSpace(text)
-	trimmed = shorten(trimmed, limit)
-
-	return trimmed
-}
-func ExtractBodyFromWebsite(url string) (string, error) {
+func ExtractBodyFromWebsite(url string) ([]string, error) {
 	// Sync code since this is intended to be a single user system
 	wg := new(sync.WaitGroup)
 	wg.Add(1)
@@ -67,5 +61,5 @@ func ExtractBodyFromWebsite(url string) (string, error) {
 
 	wg.Wait()
 
-	return trimText(bodyText, 500), nil
+	return breakText(bodyText), nil
 }

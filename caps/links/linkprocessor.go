@@ -1,11 +1,10 @@
-package caps
+package links
 
 import (
-	"fmt"
 	client "ratatoskr/client"
 	"ratatoskr/repos"
 	"ratatoskr/types"
-	"regexp"
+	"strings"
 )
 
 type LinkProcessor struct {
@@ -27,24 +26,18 @@ func (c LinkProcessor) Check(req *types.RequestMessage) float32 {
 }
 
 func (c LinkProcessor) Execute(req *types.RequestMessage) (types.ResponseMessage, error) {
-	//Extract link from message
-	r := regexp.MustCompile(`(http|https)://[^\s]+`)
-	link := r.FindString(req.Message)
+	link := extractLinkFromMessage(req.Message)
 
-	body, err := client.ExtractBodyFromWebsite(link)
+	chunks, err := client.ExtractBodyFromWebsite(link)
 	if err != nil {
 		return types.ResponseMessage{}, err
 	}
-	c.repo.SaveMessage(repos.System, req.UserName, fmt.Sprintf(`Website body text: %s`, body))
 
-	context := getContextFromRepo(c.repo, req.UserName)
+	summary := getSummaryForChunks(chunks)
 
-	summary := getSummaryFromChatGpt(context)
-
-	// Scrape website for main content
 	res := types.ResponseMessage{
 		ChatID:  req.ChatID,
-		Message: summary,
+		Message: strings.TrimSpace(summary),
 	}
 	return res, nil
 }
