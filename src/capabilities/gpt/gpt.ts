@@ -1,7 +1,7 @@
 import { RequestMessage } from "../../types";
 import { Capability } from "../capability";
 
-const createGptCapability = (): Capability => {
+export const createGptCapability = (): Capability => {
 	return {
 		check: (message: RequestMessage) => {
 			if (message.text.startsWith("gpt")) {
@@ -16,3 +16,5 @@ const createGptCapability = (): Capability => {
 		}
 	};
 }
+
+export type GptCapability = ReturnType<typeof createGptCapability>;

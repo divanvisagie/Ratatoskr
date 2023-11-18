@@ -23,3 +23,5 @@ export const createSelector = (capabilities: Capability[]): Layer => {
 		}
 	};
 }
+
+export type SelectorLayer = ReturnType<typeof createSelector>;
