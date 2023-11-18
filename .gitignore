@@ -1,2 +1,4 @@
 tmp
 .envrc
+node_modules
+bun.lockb
