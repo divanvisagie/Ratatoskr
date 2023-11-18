@@ -2,13 +2,17 @@
   "name": "ratatoskr",
   "module": "index.ts",
   "type": "module",
-  "scripts" : {
+  "scripts": {
     "start": "bun run src/index.ts"
   },
   "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.63.2",
     "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0"
   }
 }
