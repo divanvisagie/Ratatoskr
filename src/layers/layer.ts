@@ -1,5 +1,5 @@
 import { RequestMessage, ResponseMessage } from "../types"
 
 export type Layer = {
-	passThru: (message: RequestMessage) => ResponseMessage 
+	passThru: (message: RequestMessage) => Promise<ResponseMessage>
 }

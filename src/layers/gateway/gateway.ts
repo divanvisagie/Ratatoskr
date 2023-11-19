@@ -3,8 +3,8 @@ import { Layer } from "../layer";
 
 export const createGatewayLayer = (nextLayer: Layer): Layer => {
 	return {
-		passThru: (message: RequestMessage): ResponseMessage => {
-			return nextLayer.passThru(message);
+		passThru: async (message: RequestMessage): Promise<ResponseMessage> => {
+			return await nextLayer.passThru(message);
 		}
 	};
 }
