@@ -13,6 +13,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "node-telegram-bot-api": "^0.64.0"
+    "node-telegram-bot-api": "^0.64.0",
+    "openai": "^4.20.0"
   }
 }

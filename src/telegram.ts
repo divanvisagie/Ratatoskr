@@ -25,14 +25,14 @@ export const startBot = ({ token, gatewayLayer }: BotParams) => {
 
 	// Listen for any kind of message. There are different kinds of
 	// messages.
-	bot.on('message', (msg) => {
+	bot.on('message', async (msg) => {
 		const chatId = msg.chat.id;
 
 		const message: RequestMessage = {
 			text: msg.text?.toString() || ''
 		}
 
-		const response = gatewayLayer.passThru(message)
+		const response = await gatewayLayer.passThru(message)
 		
 		// send a message to the chat acknowledging receipt of their message
 		bot.sendMessage(chatId, response.text);
