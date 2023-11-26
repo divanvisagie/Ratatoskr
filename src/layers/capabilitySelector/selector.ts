@@ -4,7 +4,7 @@ import { Layer } from "../layer";
 
 export const createSelector = (capabilities: Capability[]): Layer => {
 	return {
-		passThru: (message: RequestMessage): ResponseMessage => {
+		passThru: async (message: RequestMessage): Promise<ResponseMessage> => {
 			let score = 0;
 			let bestCapability: Capability | undefined;
 			for (const capability of capabilities) {
@@ -15,7 +15,7 @@ export const createSelector = (capabilities: Capability[]): Layer => {
 				}
 			}
 			if (bestCapability) {
-				return bestCapability.process(message);
+				return await bestCapability.process(message);
 			}
 			return {
 				text: `No capability found for message: ${message.text}`
