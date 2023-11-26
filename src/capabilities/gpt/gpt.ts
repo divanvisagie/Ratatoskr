@@ -1,7 +1,6 @@
 import { RequestMessage } from "../../types";
 import { Capability } from "../capability";
 import OpenAI from 'openai'
-import { ClientOptions } from 'openai'
 
 const systemPrompt = `
 	Ratatoskr is an EI (Extended Intelligence) written in Go. 
@@ -34,7 +33,7 @@ const callGpt = async (prompt: string): Promise<string> => {
 	];
 	const params = {
 		messages: messages,
-		model: 'gpt-3.5-turbo',
+		model: 'gpt-4',
 	}; 
 
 	const chatCompletion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params as any);
