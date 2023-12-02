@@ -6,7 +6,7 @@ import { join } from "node:path";
 const mockLayer = {
 	passThru: async (message: any) => {
 		return {
-			text: message.text
+			text: "Mock response message" 
 		}
 	}
 }
@@ -49,6 +49,16 @@ describe("chatlog layer", () => {
 
 		expect(response.text).toBe("Hello");
 
+		const postHandle = Bun.file(path);
+		const fileExistsAfterPassThru = await postHandle.exists();
+		expect(fileExistsAfterPassThru).toBe(true);
+	})
+
+	it("should write request and response message to file", async () => {
+		const _response = await layer.passThru({ text: "Hello" });
+
+	
+		const path = getDirectory();
 		const postHandle = Bun.file(path);
 		const fileExistsAfterPassThru = await postHandle.exists();
 		expect(fileExistsAfterPassThru).toBe(true);

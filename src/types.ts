@@ -1,4 +1,5 @@
 export type RequestMessage = {
+	userId: number
 	text: string
 }
 

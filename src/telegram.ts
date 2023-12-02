@@ -28,14 +28,19 @@ export const startBot = ({ token, gatewayLayer }: BotParams) => {
 	bot.on('message', async (msg) => {
 		const chatId = msg.chat.id;
 
-		const message: RequestMessage = {
-			text: msg.text?.toString() || ''
-		}
+		console.log('From user', msg.from?.username, msg.from?.id)
 
-		const response = await gatewayLayer.passThru(message)
-		
-		// send a message to the chat acknowledging receipt of their message
-		bot.sendMessage(chatId, response.text);
+		if (msg.from) {
+			const message: RequestMessage = {
+				userId: msg.from.id,
+				text: msg.text?.toString() || ''
+			}
+
+			const response = await gatewayLayer.passThru(message)
+
+			// send a message to the chat acknowledging receipt of their message
+			bot.sendMessage(chatId, response.text);
+		}
 	});
 
 }
