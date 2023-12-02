@@ -1,3 +1,4 @@
+import { LogItem, MessageRepository } from "../../repositories/message";
 import { RequestMessage } from "../../types";
 import { Capability } from "../capability";
 import OpenAI from 'openai'
@@ -22,33 +23,37 @@ const openai = new OpenAI({
 	apiKey: openAiToken
 });
 
-const callGpt = async (prompt: string): Promise<string> => {
-	const messages = [{
-		role: 'system',
-		content: systemPrompt
-	}, {
-		role: 'user',
-		content: prompt
-	}
-	];
+const callGpt = async (messages: LogItem[]): Promise<string> => {
 	const params = {
 		messages: messages,
 		model: 'gpt-4',
-	}; 
+	};
 
 	const chatCompletion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params as any);
-	return chatCompletion.choices[0].message.content || 'No result' ;
+	return chatCompletion.choices[0].message.content || 'No result';
 }
 
 
-export const createGptCapability = (): Capability => {
+export const createGptCapability = (messageRepository: MessageRepository): Capability => {
 	return {
 		check: (_message: RequestMessage) => {
 			return 0.9;
 		},
 		process: async (message: RequestMessage) => {
 			console.log(`calling gpt with token ${openAiToken}`);
-			const ans = await callGpt(message.text);
+
+			const existingMessages = await messageRepository.readMessages(message.userId);
+			const messages: LogItem[] = [{
+				role: 'system',
+				content: systemPrompt
+			}, ...existingMessages, {
+				role: 'user',
+				content: message.text
+			}];
+
+			console.log('calling with context', messages);
+
+			const ans = await callGpt(messages);
 			return {
 				text: ans
 			};
